@@ -44,4 +44,10 @@ class MemoryRepoTest {
         assertThat(repo.list().get(1l)).isEqualTo(new Phrase(1, "aaa", "aaa"));
         assertThat(repo.list().get(3l)).isEqualTo(new Phrase(3, "ccc", "ccc"));
     }
+
+    @Test
+    void deleteFail(){
+        assertThat(repo.delete(1l)).isFalse();
+        assertThat(repo.delete(2l)).isFalse();
+    }
 }

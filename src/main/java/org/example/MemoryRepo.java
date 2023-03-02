@@ -36,11 +36,9 @@ public class MemoryRepo implements Repository {
 
     @Override
     public boolean delete(long id) {
-        try {
+        if (datum.containsKey(id)) {
             datum.remove(id);
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return false;
     }
