@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.Controller.Controller;
+import org.example.controller.Controller;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ public class App {
 
         String command;
         while (!(command = getCommand()).equals("종료")) {
-            controller.excute(command);
+            controller.execute(command);
         }
 
         Input.getKeyboard().close();
