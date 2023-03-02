@@ -1,9 +1,13 @@
 package org.example;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 public interface Repository {
     long register(String content, String authorName);
 
-    ArrayList<Phrase> listPhrases();
+    void init();
+
+    Map<Long, Phrase> list();
+
+    boolean delete(long id);
 }
