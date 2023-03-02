@@ -1,13 +1,11 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MemoryRepo implements Repository {
     private static long nextId = 1;
 
-    private Map<Long, Phrase> datum = new HashMap<>();
+    private Map<Long, Phrase> datum = new TreeMap<>(Collections.reverseOrder());
 
     private MemoryRepo() {}
 

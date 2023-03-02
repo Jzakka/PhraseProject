@@ -19,8 +19,12 @@ public class Service {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("---------------------");
         Map<Long, Phrase> phrases = repo.list();
-        for (long i = phrases.size() - 1; i >= 0; i--) {
-            System.out.println(phrases.get((int) i));
+        phrases.forEach((i,p)-> System.out.println(p));
+    }
+
+    public void delete(Long id){
+        if(repo.delete(id)){
+            System.out.printf("%d번 명령이 삭제되었습니다.%n", id);
         }
     }
 }

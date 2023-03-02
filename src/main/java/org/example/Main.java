@@ -15,14 +15,19 @@ public class Main {
                 service.register();
             } else if (command.equals("목록")) {
                 service.list();
+            } else if (command.contains("삭제")) {
+                service.delete(parseId(command));
             }
         }
     }
 
-    static String getCommand() {
+    private static String getCommand() {
         System.out.print("명령) ");
         return Input.getKeyboard().nextLine();
     }
 
-
+    private static Long parseId(String command){
+        int start = command.indexOf("id=") + 3;
+        return Long.valueOf(command.substring(start));
+    }
 }
