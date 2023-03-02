@@ -5,11 +5,20 @@ import org.json.simple.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.StringTokenizer;
 
 public class Phrase {
     private long id;
     private String content;
     private String author;
+
+    public static Phrase valueOf(String line){
+        String[] tokens = line.split(" / ");
+        return new Phrase(Long.parseLong(tokens[0]), tokens[1], tokens[2]);
+    }
+    public static Long getId(String line){
+        return Long.parseLong(line.split(" / ")[0].trim());
+    }
 
     public Phrase(long id, String content, String author) {
         this.id = id;
@@ -32,6 +41,7 @@ public class Phrase {
         phrase.put("author", author);
         return new JSONObject(phrase);
     }
+
 
     @Override
     public String toString() {

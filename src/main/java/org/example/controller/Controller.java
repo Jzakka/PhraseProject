@@ -4,6 +4,7 @@ import org.example.Validator;
 import org.example.service.Service;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 public class Controller {
 
@@ -24,8 +25,14 @@ public class Controller {
         return parsedId;
     }
 
+    private String parseAction(String request){
+        return request.split("\\?")[0];
+    }
+
     private void dispatch(String request) throws IOException {
-        switch(request) {
+        String action = parseAction(request);
+
+        switch(action) {
             case "등록":
                 service.register();
                 break;

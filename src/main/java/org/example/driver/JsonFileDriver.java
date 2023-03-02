@@ -1,4 +1,4 @@
-package org.example.repository;
+package org.example.driver;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -8,7 +8,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.util.stream.Collectors;
 
-public class JsonFileDriver {
+public class JsonFileDriver implements ValidatableDriver {
     public JSONArray fetchAllData() {
         FileReader fr = null;
         try {
@@ -39,7 +39,7 @@ public class JsonFileDriver {
             bw.write(jsonArray.toJSONString());
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 bw.close();
             } catch (IOException e) {
@@ -49,17 +49,24 @@ public class JsonFileDriver {
     }
 
     //Filter whose id is not id
-    public JSONArray getFilteredArray(long id){
+    public JSONArray getFilteredArray(long id) {
         return (JSONArray) (fetchAllData()
                 .stream()
                 .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) != id)
                 .collect(Collectors.toCollection(JSONArray::new)));
     }
 
-    public JSONObject getObjectWithId(long id){
-        return  (JSONObject) ((JSONArray) (fetchAllData()
-                        .stream()
-                        .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) == id)
-                        .collect(Collectors.toCollection(JSONArray::new)))).get(0);
+    public JSONObject getObjectWithId(long id) {
+        return (JSONObject) ((JSONArray) (fetchAllData()
+                .stream()
+                .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) == id)
+                .collect(Collectors.toCollection(JSONArray::new)))).get(0);
+    }
+
+    @Override
+    public boolean exists(long id) {
+        return fetchAllData()
+                .stream()
+                .anyMatch(o -> Long.parseLong(((JSONObject) o).get("id").toString()) == id);
     }
 }
