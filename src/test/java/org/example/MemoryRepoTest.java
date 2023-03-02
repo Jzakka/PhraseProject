@@ -1,13 +1,14 @@
 package org.example;
 
-import org.assertj.core.api.Assertions;
+import org.example.domain.Phrase;
+import org.example.repository.MemoryRepo;
+import org.example.repository.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryRepoTest {
     Repository repo = MemoryRepo.getPhraseRepo();
@@ -18,7 +19,7 @@ class MemoryRepoTest {
     }
 
     @Test
-    void register() {
+    void register() throws IOException {
         repo.register("aaa", "aaa");
         repo.register("aaa", "aaa");
 
@@ -26,7 +27,7 @@ class MemoryRepoTest {
     }
 
     @Test
-    void list() {
+    void list() throws IOException {
         repo.register("aaa", "aaa");
         repo.register("bbb", "bbb");
 
@@ -35,7 +36,7 @@ class MemoryRepoTest {
     }
 
     @Test
-    void delete() {
+    void delete() throws IOException {
         repo.register("aaa", "aaa");
         repo.register("bbb", "bbb");
         repo.register("ccc", "ccc");
@@ -52,7 +53,7 @@ class MemoryRepoTest {
     }
 
     @Test
-    void update(){
+    void update() throws IOException {
         repo.register("aaa", "aaa");
         repo.register("bbb", "bbb");
         repo.register("ccc", "ccc");

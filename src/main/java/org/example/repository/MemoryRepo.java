@@ -1,4 +1,6 @@
-package org.example;
+package org.example.repository;
+
+import org.example.domain.Phrase;
 
 import java.util.*;
 
