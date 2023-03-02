@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class Service {
-    private Repository repo = TextFileRepo.getPhraseRepo();
+    private Repository repo = JsonRepo.getPhraseRepo();
     private JsonFileDriver jfd = new JsonFileDriver();
 
     public void register() throws IOException {

@@ -4,14 +4,13 @@ import org.example.Validator;
 import org.example.service.Service;
 
 import java.io.IOException;
-import java.util.StringTokenizer;
 
 public class Controller {
 
     private Service service = new Service();
     private Validator validator = new Validator();
 
-    public void execute(String request) throws IOException {
+    public void execute(String request) {
         try {
             dispatch(request);
         } catch (Exception e) {

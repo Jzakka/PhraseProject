@@ -5,7 +5,6 @@ import org.example.driver.JsonFileDriver;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.*;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -39,15 +38,10 @@ public class JsonRepo implements Repository {
     }
 
     @Override
-    public long register(String content, String authorName) throws IOException {
-        Map<String, Object> phrase = new HashMap<>();
-        phrase.put("id", nextIdx);
-        phrase.put("content", content);
-        phrase.put("author", authorName);
-
+    public long register(String content, String authorName){
         JSONArray jsonArray = jfd.fetchAllData();
-        JSONObject jsonObject = new JSONObject(phrase);
-        jsonArray.add(jsonObject);
+
+        jsonArray.add(new Phrase(nextIdx, content, authorName).toJson());
 
         jfd.overWriteDate(jsonArray);
 
@@ -62,10 +56,7 @@ public class JsonRepo implements Repository {
     @Override
     public Phrase find(Long id) {
         JSONObject foundOne = jfd.getObjectWithId(id);
-        return new Phrase(
-                Long.parseLong(foundOne.get("id").toString()),
-                foundOne.get("content").toString(),
-                foundOne.get("author").toString());
+        return Phrase.valueOf(foundOne);
     }
 
     @Override
@@ -75,11 +66,7 @@ public class JsonRepo implements Repository {
         Map<Long, Phrase> result = new TreeMap<>(Collections.reverseOrder());
 
         for (Object o : jsonArray) {
-            JSONObject jsonObject = (JSONObject) o;
-            Long id = Long.parseLong(jsonObject.get("id").toString());
-            String content = jsonObject.get("content").toString();
-            String author = jsonObject.get("author").toString();
-            result.put(id, new Phrase(id, content, author));
+            result.put(Phrase.getId((JSONObject) o), Phrase.valueOf((JSONObject) o));
         }
 
         return result;

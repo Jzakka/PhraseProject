@@ -5,7 +5,6 @@ import org.json.simple.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.StringTokenizer;
 
 public class Phrase {
     private long id;
@@ -18,6 +17,17 @@ public class Phrase {
     }
     public static Long getId(String line){
         return Long.parseLong(line.split(" / ")[0].trim());
+    }
+
+    public static Phrase valueOf(JSONObject json){
+        return new Phrase(
+                Long.parseLong(json.get("id").toString()),
+                json.get("content").toString(),
+                json.get("author").toString());
+    }
+
+    public static Long getId(JSONObject json) {
+        return Long.parseLong(json.get("id").toString());
     }
 
     public Phrase(long id, String content, String author) {

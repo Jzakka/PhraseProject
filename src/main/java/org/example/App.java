@@ -7,7 +7,7 @@ import java.io.IOException;
 public class App {
     private Controller controller = new Controller();
 
-    public void run() throws IOException {
+    public void run(){
         System.out.println("== 명언 앱 ==");
 
         String command;

@@ -12,10 +12,10 @@ public interface Repository {
     void init();
 
     long getNextId();
-    Phrase find(Long id) throws FileNotFoundException, IOException;
+    Phrase find(Long id) throws IOException;
     Map<Long, Phrase> list() throws IOException;
 
-    void delete(long id) throws FileNotFoundException, IOException;
+    void delete(long id) throws IOException;
 
-    void update(long i, String updated_content, String mola) throws FileNotFoundException, IOException;
+    void update(long i, String updated_content, String mola) throws IOException;
 }

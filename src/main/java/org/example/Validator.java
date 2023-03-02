@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 public class Validator {
-    ValidatableDriver driver = new TextFileDriver();
+    ValidatableDriver driver = new JsonFileDriver();
 
     public void validateId(long id) throws RuntimeException {
         if (!driver.exists(id)) {

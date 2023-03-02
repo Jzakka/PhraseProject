@@ -2,11 +2,7 @@ package org.example.repository;
 
 import org.example.domain.Phrase;
 import org.example.driver.TextFileDriver;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TextFileRepo implements Repository {
 
