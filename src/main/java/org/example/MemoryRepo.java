@@ -30,6 +30,11 @@ public class MemoryRepo implements Repository {
     }
 
     @Override
+    public Phrase find(Long id) {
+        return datum.get(id);
+    }
+
+    @Override
     public Map<Long, Phrase> list() {
         return datum;
     }
@@ -38,6 +43,15 @@ public class MemoryRepo implements Repository {
     public boolean delete(long id) {
         if (datum.containsKey(id)) {
             datum.remove(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean update(long id, String updatedContent, String authorName) {
+        if (datum.containsKey(id)) {
+            datum.put(id, new Phrase(id, updatedContent, authorName));
             return true;
         }
         return false;

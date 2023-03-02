@@ -17,6 +17,8 @@ public class Main {
                 service.list();
             } else if (command.contains("삭제")) {
                 service.delete(parseId(command));
+            } else if (command.contains("수정")) {
+                service.update(parseId(command));
             }
         }
     }

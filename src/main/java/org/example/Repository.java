@@ -7,7 +7,10 @@ public interface Repository {
 
     void init();
 
+    Phrase find(Long id);
     Map<Long, Phrase> list();
 
     boolean delete(long id);
+
+    boolean update(long i, String updated_content, String mola);
 }

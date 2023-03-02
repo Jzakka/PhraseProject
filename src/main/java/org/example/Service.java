@@ -29,4 +29,15 @@ public class Service {
         }
         System.out.printf("%d번 명언은 존재하지 않습니다.%n", id);
     }
+
+    public void update(Long id) {
+        System.out.printf("명언(기존) : %s%n", repo.find(id).getContent());
+        System.out.print("명언 : ");
+        String newContent = Input.getKeyboard().nextLine();
+        System.out.printf("작가(기존) : %s%n", repo.find(id).getAuthor());
+        System.out.print("작가 : ");
+        String newAuthor = Input.getKeyboard().nextLine();
+
+        repo.update(id, newContent, newAuthor);
+    }
 }

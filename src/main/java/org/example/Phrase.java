@@ -13,6 +13,14 @@ public class Phrase {
         this.author = author;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
     @Override
     public String toString() {
         return String.format("%d / %s / %s", id, author, content);
