@@ -5,17 +5,19 @@ import org.example.domain.Phrase;
 import java.util.*;
 
 public class MemoryRepo implements Repository {
-    private static long nextId = 1;
+    private long nextId = 1;
+    private static MemoryRepo memoryRepo = new MemoryRepo();
 
     private Map<Long, Phrase> datum = new TreeMap<>(Collections.reverseOrder());
 
     private MemoryRepo() {}
 
     public static MemoryRepo getPhraseRepo(){
-        return new MemoryRepo();
+        return memoryRepo;
     }
 
-    public static long getNextId() {
+    @Override
+    public long getNextId() {
         return nextId;
     }
 

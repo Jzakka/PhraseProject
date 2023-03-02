@@ -11,8 +11,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class JsonRepo implements Repository {
-    private static long nextIdx = 1;
+    private long nextIdx = 1;
     JsonFileDriver jfd = new JsonFileDriver();
+
+    private static JsonRepo jsonRepo = new JsonRepo();
 
     private JsonRepo() {
         JSONArray jsonContents = jfd.fetchAllData();
@@ -29,7 +31,12 @@ public class JsonRepo implements Repository {
     }
 
     public static JsonRepo getPhraseRepo() {
-        return new JsonRepo();
+        return jsonRepo;
+    }
+
+    @Override
+    public long getNextId() {
+        return nextIdx;
     }
 
     @Override
@@ -38,7 +45,6 @@ public class JsonRepo implements Repository {
         phrase.put("id", nextIdx);
         phrase.put("content", content);
         phrase.put("author", authorName);
-
 
         JSONArray jsonArray = jfd.fetchAllData();
         JSONObject jsonObject = new JSONObject(phrase);

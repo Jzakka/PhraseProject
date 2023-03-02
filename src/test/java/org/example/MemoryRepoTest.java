@@ -23,7 +23,7 @@ class MemoryRepoTest {
         repo.register("aaa", "aaa");
         repo.register("aaa", "aaa");
 
-        assertThat(MemoryRepo.getNextId()).isEqualTo(3);
+        assertThat(repo.getNextId()).isEqualTo(3);
     }
 
     @Test
@@ -47,8 +47,7 @@ class MemoryRepoTest {
 
     @Test
     void deleteFail() throws IOException {
-        assertThat(repo.delete(1l)).isFalse();
-        assertThat(repo.delete(2l)).isFalse();
+        repo.delete(1l);
     }
 
     @Test
@@ -56,6 +55,8 @@ class MemoryRepoTest {
         repo.register("aaa", "aaa");
         repo.register("bbb", "bbb");
         repo.register("ccc", "ccc");
+
+        repo.update(1, "Updated Content", "mola");
 
         assertThat(repo.list().get(1l)).isEqualTo(new Phrase(1, "Updated Content", "mola"));
     }

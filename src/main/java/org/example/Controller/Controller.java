@@ -4,7 +4,6 @@ import org.example.Validator;
 import org.example.service.Service;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 public class Controller {
 

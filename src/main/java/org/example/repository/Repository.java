@@ -11,6 +11,7 @@ public interface Repository {
 
     void init();
 
+    long getNextId();
     Phrase find(Long id) throws FileNotFoundException, IOException;
     Map<Long, Phrase> list() throws IOException;
 
