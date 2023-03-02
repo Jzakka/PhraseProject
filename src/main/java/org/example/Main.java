@@ -10,12 +10,21 @@ public class Main {
 
         String command;
         while (!(command = getCommand()).equals("종료")) {
-
+            if (command.equals("등록")) {
+                register();
+            }
         }
     }
 
     static String getCommand() {
         System.out.print("명령) ");
         return sc.nextLine();
+    }
+
+    static void register(){
+        System.out.print("명언 : ");
+        sc.nextLine();
+        System.out.print("작가 : ");
+        sc.nextLine();
     }
 }
