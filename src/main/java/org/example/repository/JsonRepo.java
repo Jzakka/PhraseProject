@@ -1,24 +1,21 @@
 package org.example.repository;
 
+import org.example.JsonFileDriver;
 import org.example.domain.Phrase;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class JsonRepo implements Repository {
     private static long nextIdx = 1;
-    private FileReader fr;
-    private FileWriter fw;
-    JSONParser jsonParser = new JSONParser();
+    JsonFileDriver jfd = new JsonFileDriver();
 
-    private JsonRepo() throws IOException, ParseException {
-        fr = new FileReader("data.json");
-        JSONArray jsonContents = (JSONArray) jsonParser.parse(fr);
+    private JsonRepo() {
+        JSONArray jsonContents = jfd.fetchAllData();
         OptionalLong id = IntStream
                 .range(0, jsonContents.size())
                 .mapToObj(i -> (JSONObject) jsonContents.get(i))
@@ -29,17 +26,10 @@ public class JsonRepo implements Repository {
         } else {
             nextIdx = 1;
         }
-
-        fr.close();
     }
 
     public static JsonRepo getPhraseRepo() {
-        try {
-            return new JsonRepo();
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return new JsonRepo();
     }
 
     @Override
@@ -49,22 +39,13 @@ public class JsonRepo implements Repository {
         phrase.put("content", content);
         phrase.put("author", authorName);
 
-        fr = new FileReader("data.json");
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = (JSONArray) jsonParser.parse(fr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        JSONArray jsonArray = jfd.fetchAllData();
         JSONObject jsonObject = new JSONObject(phrase);
         jsonArray.add(jsonObject);
 
-        fw = new FileWriter("data.json");
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write(jsonArray.toJSONString());
+        jfd.overWriteDate(jsonArray);
 
-        bw.close();
-        fr.close();
         return nextIdx++;
     }
 
@@ -74,38 +55,22 @@ public class JsonRepo implements Repository {
     }
 
     @Override
-    public Phrase find(Long id) throws IOException {
-        fr = new FileReader("data.json");
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = (JSONArray) jsonParser.parse(fr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        for (Object o : jsonArray) {
-            JSONObject jsonObject = (JSONObject) o;
-            Long jsonId = Long.parseLong(jsonObject.get("id").toString());
-            String content = jsonObject.get("content").toString();
-            String author = jsonObject.get("author").toString();
-            if (jsonId == id) {
-                return new Phrase(jsonId, content, author);
-            }
-        }
-
-        fr.close();
-        return null;
+    public Phrase find(Long id) {
+        JSONArray filteredArray = (JSONArray) (jfd.fetchAllData()
+                .stream()
+                .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) == id)
+                .collect(Collectors.toCollection(JSONArray::new)));
+        JSONObject foundOne = (JSONObject) filteredArray.get(0);
+        return new Phrase(
+                Long.parseLong(foundOne.get("id").toString()),
+                foundOne.get("content").toString(),
+                foundOne.get("author").toString());
     }
 
     @Override
-    public Map<Long, Phrase> list() throws IOException {
-        fr = new FileReader("data.json");
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = (JSONArray) jsonParser.parse(fr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public Map<Long, Phrase> list() {
+        JSONArray jsonArray = jfd.fetchAllData();
+
         Map<Long, Phrase> result = new TreeMap<>(Collections.reverseOrder());
 
         for (Object o : jsonArray) {
@@ -116,76 +81,28 @@ public class JsonRepo implements Repository {
             result.put(id, new Phrase(id, content, author));
         }
 
-        fr.close();
         return result;
     }
 
     @Override
-    public boolean delete(long id) throws IOException {
-        boolean res = false;
-        fr = new FileReader("data.json");
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = (JSONArray) jsonParser.parse(fr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        for (Object o : jsonArray) {
-            JSONObject jsonObject = (JSONObject) o;
-            Long jsonId = Long.parseLong(jsonObject.get("id").toString());
+    public void delete(long id) {
+        JSONArray deletedArray = (JSONArray) (jfd.fetchAllData()
+                .stream()
+                .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) != id)
+                .collect(Collectors.toCollection(JSONArray::new)));
 
-            if (jsonId == id) {
-                jsonArray.remove(o);
-                res = true;
-                break;
-            }
-        }
-        fw = new FileWriter("data.json");
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write(jsonArray.toJSONString());
-
-        bw.close();
-        fr.close();
-        return res;
+        jfd.overWriteDate(deletedArray);
     }
 
     @Override
-    public boolean update(long id, String content, String authorName) throws IOException {
-        boolean res = false;
-        fr = new FileReader("data.json");
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = (JSONArray) jsonParser.parse(fr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Map<Long, Phrase> result = new TreeMap<>(Collections.reverseOrder());
+    public void update(long id, String content, String authorName) {
+        JSONArray deletedArray = (JSONArray) (jfd.fetchAllData()
+                .stream()
+                .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) != id)
+                .collect(Collectors.toCollection(JSONArray::new)));
 
-        for (Object o : jsonArray) {
-            JSONObject jsonObject = (JSONObject) o;
-            Long jsonId = Long.parseLong(jsonObject.get("id").toString());
+        deletedArray.add(new Phrase(id, content, authorName).toJson());
 
-            if (jsonId == id) {
-                jsonArray.remove(o);
-                res = true;
-                break;
-            }
-        }
-        if (!res) {
-            return res;
-        }
-        Map<String, Object> phrase = new HashMap<>();
-        phrase.put("id", id);
-        phrase.put("content", content);
-        phrase.put("author", authorName);
-        jsonArray.add(new JSONObject(phrase));
-
-        fw = new FileWriter("data.json");
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write(jsonArray.toJSONString());
-
-        bw.close();
-        fr.close();
-        return res;
+        jfd.overWriteDate(deletedArray);
     }
 }

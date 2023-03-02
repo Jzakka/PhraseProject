@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Input {
     private static Scanner sc = new Scanner(System.in);
 
-    public Input() {}
+    private Input() {}
 
     public static Scanner getKeyboard() {
         return sc;

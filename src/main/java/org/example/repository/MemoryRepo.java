@@ -42,20 +42,12 @@ public class MemoryRepo implements Repository {
     }
 
     @Override
-    public boolean delete(long id) {
-        if (datum.containsKey(id)) {
-            datum.remove(id);
-            return true;
-        }
-        return false;
+    public void delete(long id) {
+        datum.remove(id);
     }
 
     @Override
-    public boolean update(long id, String updatedContent, String authorName) {
-        if (datum.containsKey(id)) {
-            datum.put(id, new Phrase(id, updatedContent, authorName));
-            return true;
-        }
-        return false;
+    public void update(long id, String updatedContent, String authorName) {
+        datum.put(id, new Phrase(id, updatedContent, authorName));
     }
 }

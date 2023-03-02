@@ -14,7 +14,7 @@ public interface Repository {
     Phrase find(Long id) throws FileNotFoundException, IOException;
     Map<Long, Phrase> list() throws IOException;
 
-    boolean delete(long id) throws FileNotFoundException, IOException;
+    void delete(long id) throws FileNotFoundException, IOException;
 
-    boolean update(long i, String updated_content, String mola) throws FileNotFoundException, IOException;
+    void update(long i, String updated_content, String mola) throws FileNotFoundException, IOException;
 }

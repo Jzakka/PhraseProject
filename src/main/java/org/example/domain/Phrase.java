@@ -1,5 +1,9 @@
 package org.example.domain;
 
+import org.json.simple.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Phrase {
@@ -19,6 +23,14 @@ public class Phrase {
 
     public String getAuthor() {
         return author;
+    }
+
+    public JSONObject toJson(){
+        Map<String, Object> phrase = new HashMap<>();
+        phrase.put("id", id);
+        phrase.put("content", content);
+        phrase.put("author", author);
+        return new JSONObject(phrase);
     }
 
     @Override
