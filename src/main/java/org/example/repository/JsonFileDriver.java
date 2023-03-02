@@ -1,4 +1,4 @@
-package org.example;
+package org.example.repository;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,7 +31,7 @@ public class JsonFileDriver {
     }
 
     public void overWriteDate(JSONArray jsonArray) {
-        FileWriter fw = null;
+        FileWriter fw;
         BufferedWriter bw = null;
         try {
             fw = new FileWriter("data.json");
@@ -46,5 +46,20 @@ public class JsonFileDriver {
                 e.printStackTrace();
             }
         }
+    }
+
+    //Filter whose id is not id
+    public JSONArray getFilteredArray(long id){
+        return (JSONArray) (fetchAllData()
+                .stream()
+                .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) != id)
+                .collect(Collectors.toCollection(JSONArray::new)));
+    }
+
+    public JSONObject getObjectWithId(long id){
+        return  (JSONObject) ((JSONArray) (fetchAllData()
+                        .stream()
+                        .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) == id)
+                        .collect(Collectors.toCollection(JSONArray::new)))).get(0);
     }
 }

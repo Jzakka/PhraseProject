@@ -1,20 +1,18 @@
 package org.example.service;
 
 import org.example.Input;
+import org.example.repository.JsonFileDriver;
 import org.example.domain.Phrase;
 import org.example.repository.JsonRepo;
 import org.example.repository.Repository;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Service {
     private Repository repo = JsonRepo.getPhraseRepo();
+    private JsonFileDriver jfd = new JsonFileDriver();
 
     public void register() throws IOException {
         System.out.print("명언 : ");
@@ -22,7 +20,8 @@ public class Service {
         System.out.print("작가 : ");
         String author = Input.getKeyboard().nextLine();
 
-        System.out.printf("%d번 명언이 등록되었습니다.%n", repo.register(content, author));
+        long registeredId = repo.register(content, author);
+        System.out.printf("%d번 명언이 등록되었습니다.%n", registeredId);
     }
 
     public void list() throws IOException {
@@ -34,6 +33,7 @@ public class Service {
 
     public void delete(Long id) throws IOException {
         repo.delete(id);
+        System.out.printf("%d번 명언이 삭제외었습니다.", id);
     }
 
     public void update(Long id) throws IOException {
@@ -49,20 +49,12 @@ public class Service {
     }
 
     public void build() throws IOException {
-        Map<Long, Phrase> phrases = repo.list();
-        Map<String, Object> phrase = new HashMap<>();
         JSONArray jsonArray = new JSONArray();
-        for (Map.Entry<Long, Phrase> e : phrases.entrySet()) {
-            phrase.put("id", e.getKey());
-            phrase.put("content", e.getValue().getContent());
-            phrase.put("author", e.getValue().getAuthor());
-            jsonArray.add(new JSONObject(phrase));
+        for (Map.Entry<Long, Phrase> e : repo.list().entrySet()) {
+            jsonArray.add(e.getValue().toJson());
         }
-        FileWriter fw = new FileWriter("data.json");
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write(jsonArray.toJSONString());
+        jfd.overWriteDate(jsonArray);
 
-        bw.close();
         System.out.println("data.json 파일의 빌드가 완료되었습니다.");
     }
 }

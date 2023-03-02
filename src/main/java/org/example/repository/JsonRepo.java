@@ -1,13 +1,11 @@
 package org.example.repository;
 
-import org.example.JsonFileDriver;
 import org.example.domain.Phrase;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class JsonRepo implements Repository {
@@ -62,11 +60,7 @@ public class JsonRepo implements Repository {
 
     @Override
     public Phrase find(Long id) {
-        JSONArray filteredArray = (JSONArray) (jfd.fetchAllData()
-                .stream()
-                .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) == id)
-                .collect(Collectors.toCollection(JSONArray::new)));
-        JSONObject foundOne = (JSONObject) filteredArray.get(0);
+        JSONObject foundOne = jfd.getObjectWithId(id);
         return new Phrase(
                 Long.parseLong(foundOne.get("id").toString()),
                 foundOne.get("content").toString(),
@@ -92,20 +86,14 @@ public class JsonRepo implements Repository {
 
     @Override
     public void delete(long id) {
-        JSONArray deletedArray = (JSONArray) (jfd.fetchAllData()
-                .stream()
-                .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) != id)
-                .collect(Collectors.toCollection(JSONArray::new)));
+        JSONArray deletedArray = jfd.getFilteredArray(id);
 
         jfd.overWriteDate(deletedArray);
     }
 
     @Override
     public void update(long id, String content, String authorName) {
-        JSONArray deletedArray = (JSONArray) (jfd.fetchAllData()
-                .stream()
-                .filter(o -> Long.parseLong(((JSONObject) o).get("id").toString()) != id)
-                .collect(Collectors.toCollection(JSONArray::new)));
+        JSONArray deletedArray = jfd.getFilteredArray(id);
 
         deletedArray.add(new Phrase(id, content, authorName).toJson());
 
