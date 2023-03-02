@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Main {
     static Scanner sc = new Scanner(System.in);
 
+    static PhraseRepo repo = PhraseRepo.getPhraseRepo();
     public static void main(String[] args) {
         System.out.println("== 명언 앱 ==");
 
@@ -23,8 +24,10 @@ public class Main {
 
     static void register(){
         System.out.print("명언 : ");
-        sc.nextLine();
+        String content = sc.nextLine();
         System.out.print("작가 : ");
-        sc.nextLine();
+        String author = sc.nextLine();
+
+        repo.register(content, author);
     }
 }
