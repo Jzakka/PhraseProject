@@ -50,4 +50,14 @@ class MemoryRepoTest {
         assertThat(repo.delete(1l)).isFalse();
         assertThat(repo.delete(2l)).isFalse();
     }
+
+    @Test
+    void update(){
+        repo.register("aaa", "aaa");
+        repo.register("bbb", "bbb");
+        repo.register("ccc", "ccc");
+
+        assertThat(repo.update(1, "Updated Content", "mola")).isTrue();
+        assertThat(repo.list().get(1l)).isEqualTo(new Phrase(1, "Updated Content", "mola"));
+    }
 }
