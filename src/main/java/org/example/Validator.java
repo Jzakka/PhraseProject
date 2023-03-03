@@ -3,11 +3,7 @@ package org.example;
 import org.example.driver.JsonFileDriver;
 import org.example.driver.TextFileDriver;
 import org.example.driver.ValidatableDriver;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 public class Validator {
     ValidatableDriver driver = new JsonFileDriver();

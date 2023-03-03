@@ -15,7 +15,9 @@ public class Service {
     private JsonFileDriver jfd = new JsonFileDriver();
 
     public long register(List<String> contentAndAuthor) throws IOException {
-        return repo.register(contentAndAuthor.get(0), contentAndAuthor.get(1));
+        String content = contentAndAuthor.get(0);
+        String author = contentAndAuthor.get(1);
+        return repo.register(content, author);
     }
 
     public Map<Long, Phrase> list() throws IOException {
