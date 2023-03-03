@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.controller.Controller;
+import org.example.view.View;
 
 public class App {
     private Controller controller = new Controller();

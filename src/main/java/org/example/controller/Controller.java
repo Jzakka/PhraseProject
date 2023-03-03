@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.View;
+import org.example.view.View;
 import org.example.domain.Phrase;
 import org.example.service.Service;
 

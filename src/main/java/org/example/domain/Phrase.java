@@ -15,15 +15,15 @@ public class Phrase {
         String[] tokens = line.split(" / ");
         return new Phrase(Long.parseLong(tokens[0]), tokens[1], tokens[2]);
     }
-    public static Long getId(String line){
-        return Long.parseLong(line.split(" / ")[0].trim());
-    }
-
     public static Phrase valueOf(JSONObject json){
         return new Phrase(
                 Long.parseLong(json.get("id").toString()),
                 json.get("content").toString(),
                 json.get("author").toString());
+    }
+
+    public static Long getId(String line){
+        return Long.parseLong(line.split(" / ")[0].trim());
     }
 
     public static Long getId(JSONObject json) {
