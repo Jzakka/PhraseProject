@@ -55,8 +55,11 @@ public class JsonRepo implements Repository {
 
     @Override
     public Phrase find(Long id) {
-        JSONObject foundOne = jfd.getObjectWithId(id);
-        return Phrase.valueOf(foundOne);
+        if (jfd.exists(id)) {
+            JSONObject foundOne = jfd.getObjectWithId(id);
+            return Phrase.valueOf(foundOne);
+        }
+        throw new NoSuchElementException(String.format("%d번 명언은 존재하지 않습니다.", id));
     }
 
     @Override

@@ -35,7 +35,10 @@ public class MemoryRepo implements Repository {
 
     @Override
     public Phrase find(Long id) {
-        return datum.get(id);
+        if (datum.containsKey(id)) {
+            return datum.get(id);
+        }
+        throw new NoSuchElementException(String.format("%d번 명언은 존재하지 않습니다.", id));
     }
 
     @Override

@@ -25,6 +25,7 @@ public class Service {
     }
 
     public void delete(Long id) throws IOException {
+        repo.find(id);
         repo.delete(id);
     }
 

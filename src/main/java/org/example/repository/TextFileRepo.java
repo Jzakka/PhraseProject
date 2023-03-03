@@ -50,8 +50,11 @@ public class TextFileRepo implements Repository {
 
     @Override
     public Phrase find(Long id) {
-        String[] tokens = tfd.getObjectWithId(id).split(" / ");
-        return new Phrase(Long.parseLong(tokens[0]),  tokens[2], tokens[1]);
+        if (tfd.exists(id)) {
+            String[] tokens = tfd.getObjectWithId(id).split(" / ");
+            return new Phrase(Long.parseLong(tokens[0]),  tokens[2], tokens[1]);
+        }
+        throw new NoSuchElementException(String.format("%d번 명언은 존재하지 않습니다.", id));
     }
 
     @Override
